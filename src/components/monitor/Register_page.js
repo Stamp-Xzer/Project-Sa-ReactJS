@@ -71,7 +71,7 @@ class Register_page extends Component {
     }
 
     if (!major) {
-      errors.major = "Major is required";
+      errors.major = "test";
       isValid = false;
     }
 
