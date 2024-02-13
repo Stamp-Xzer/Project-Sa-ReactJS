@@ -326,6 +326,8 @@ select {
   transition: all 0.35s cubic-bezier(var(--transition-main), 1);
   overflow: hidden;
   opacity: 0;
+  color: white;
+  font-weight: 600;
 }
 #navbar:hover .link-text {
   width: calc(100% - calc(5rem - 8px));
