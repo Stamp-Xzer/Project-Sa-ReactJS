@@ -1,10 +1,15 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { withRouter } from "react-router-dom";
+import Page_1 from "../../containers/Page_1";
 
 class Monitor extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      email: "",
+      password: "",
       showPassword: false,
     };
   }
@@ -15,9 +20,35 @@ class Monitor extends Component {
     }));
   };
 
+  handleEmailChange = (event) => {
+    this.setState({ email: event.target.value });
+  };
+
+  handlePasswordChange = (event) => {
+    this.setState({ password: event.target.value });
+  };
+
+  login = () => {
+    axios
+      .post("http://localhost:3301/login", {
+        email: this.state.email,
+        password: this.state.password,
+      })
+      .then((response) => {
+        // Handle successful login here, e.g. by redirecting to the home page
+        console.log("Login successful");
+        localStorage.setItem("loggedIn", "true"); // Set loggedIn to true in localStorage
+        this.props.history.push("/page1");
+      })
+      .catch((error) => {
+        // Handle error here
+        console.error("There was an error!", error);
+      });
+  };
+
   render() {
     return (
-      <form className="container-sm ">
+      <form className="container-sm">
         <div className="mb-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
             Email address
@@ -27,6 +58,7 @@ class Monitor extends Component {
             className="form-control"
             id="exampleInputEmail1"
             aria-describedby="emailHelp"
+            onChange={this.handleEmailChange}
           />
         </div>
         <div className="mb-3">
@@ -37,6 +69,7 @@ class Monitor extends Component {
             type={this.state.showPassword ? "text" : "password"}
             className="form-control"
             id="exampleInputPassword1"
+            onChange={this.handlePasswordChange}
           />
         </div>
         <div className="mb-3 form-check">
@@ -52,7 +85,11 @@ class Monitor extends Component {
         </div>
         <div className="row">
           <div className="container-md text-center">
-            <button type="button" className="btn btn-primary col-4">
+            <button
+              type="button"
+              className="btn btn-primary col-4"
+              onClick={this.login} // Call the login function on button click
+            >
               Login
             </button>
           </div>
@@ -67,4 +104,4 @@ class Monitor extends Component {
   }
 }
 
-export default Monitor;
+export default withRouter(Monitor);

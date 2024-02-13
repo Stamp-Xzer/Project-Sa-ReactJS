@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import axios from "axios";
+import { withRouter } from "react-router-dom";
 
 class Register_page extends Component {
   constructor(props) {
@@ -78,12 +80,29 @@ class Register_page extends Component {
     this.setState({ errors });
     return isValid;
   };
+  addStudent() {
+    axios
+      .post("http://localhost:3301/create", {
+        StudentID: this.state.studentId,
+        Email: this.state.email,
+        Password: this.state.password,
+        f_name: this.state.firstName,
+        l_name: this.state.lastName,
+        Marjor: this.state.major,
+        Faculty: this.state.faculty,
+      })
+      .then(() => {
+        this.props.history.push("/");
+
+        console.log("success");
+      });
+  }
 
   handleRegister = () => {
     const isValid = this.validateForm();
     if (isValid) {
       console.log("Register data:", this.state);
-      // Send data to the backend or perform desired actions
+      this.addStudent();
     } else {
       console.log("Form validation failed");
     }
@@ -93,140 +112,149 @@ class Register_page extends Component {
     const { errors } = this.state;
 
     return (
-      <form className="row g-3">
-        <div className="col-md-6">
-          <label htmlFor="email" className="form-label">
-            Email address
-          </label>
-          <input
-            type="email"
-            className={`form-control ${errors.email ? "is-invalid" : ""}`}
-            id="email"
-            name="email"
-            value={this.state.email}
-            onChange={this.handleInputChange}
-          />
-          <span className="text-danger">{errors.email}</span>
-        </div>
-        <div className="col-md-6">
-          <label htmlFor="password" className="form-label">
-            Password
-          </label>
-          <div className="input-group">
+      <div>
+        <form className="row g-3">
+          <div className="col-md-6">
+            <label htmlFor="email" className="form-label">
+              Email address
+            </label>
             <input
-              type={this.state.showPassword ? "text" : "password"}
-              className={`form-control ${errors.password ? "is-invalid" : ""}`}
-              id="password"
-              name="password"
-              value={this.state.password}
+              type="email"
+              className={`form-control ${errors.email ? "is-invalid" : ""}`}
+              id="email"
+              name="email"
+              value={this.state.email}
               onChange={this.handleInputChange}
             />
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={this.handleCheckboxChange}
-            >
-              {this.state.showPassword ? <FaEye /> : <FaEyeSlash />}
-            </button>
+            <span className="text-danger">{errors.email}</span>
           </div>
-          <span className="text-danger">{errors.password}</span>
-        </div>
-        <div className="col-md-12">
-          <label htmlFor="firstName" className="form-label">
-            ชื่อจริง
-          </label>
-          <input
-            type="firstName"
-            className={`form-control ${errors.firstName ? "is-invalid" : ""}`}
-            id="firstName"
-            name="firstName"
-            value={this.state.firstName}
-            onChange={this.handleInputChange}
-          />
-          <span className="text-danger">{errors.firstName}</span>
-        </div>
-        <div className="col-12">
-          <label htmlFor="lastName" className="form-label">
-            นามสกุล
-          </label>
-          <input
-            type="text"
-            className={`form-control ${errors.lastName ? "is-invalid" : ""}`}
-            id="lastName"
-            name="lastName"
-            value={this.state.lastName}
-            onChange={this.handleInputChange}
-          />
-          <span className="text-danger">{errors.lastName}</span>
-        </div>
-        <div className="col-12">
-          <label htmlFor="studentId" className="form-label">
-            รหัสนิสิต
-          </label>
-          <input
-            type="text"
-            className={`form-control ${errors.studentId ? "is-invalid" : ""}`}
-            id="studentId"
-            name="studentId"
-            value={this.state.studentId}
-            onChange={this.handleInputChange}
-          />
-          <span className="text-danger">{errors.studentId}</span>
-        </div>
-        <div className="col-md-6">
-          <label htmlFor="faculty" className="form-label">
-            คณะ
-          </label>
-          <select
-            className={`form-select custom-select ${
-              errors.faculty ? "is-invalid" : ""
-            }`}
-            id="faculty"
-            name="faculty"
-            value={this.state.faculty}
-            onChange={this.handleInputChange}
-          >
-            <option value="">Choose faculty</option>
-            <option value="AS">ศิลปศาสตร์และวิทยาศาสตร์</option>
-            {/* Add more options as needed */}
-          </select>
-          <span className="text-danger">{errors.faculty}</span>
-        </div>
-        <div className="col-md-6">
-          <label htmlFor="major" className="form-label">
-            สาขา
-          </label>
-          <select
-            className={`form-select custom-select ${
-              errors.major ? "is-invalid" : ""
-            }`}
-            id="major"
-            name="major"
-            value={this.state.major}
-            onChange={this.handleInputChange}
-          >
-            <option value="">Choose major</option>
-            <option value="it">เทคโนโลยีสารสนเทศ</option>
-            {/* Add more options as needed */}
-          </select>
-          <span className="text-danger">{errors.major}</span>
-        </div>
-        <div className="col-12 p-3">
-          <div className="row">
-            <div className="container-md text-center">
+          <div className="col-md-6">
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
+            <div className="input-group">
+              <input
+                type={this.state.showPassword ? "text" : "password"}
+                className={`form-control ${
+                  errors.password ? "is-invalid" : ""
+                }`}
+                id="password"
+                name="password"
+                value={this.state.password}
+                onChange={this.handleInputChange}
+              />
               <button
+                className="btn btn-outline-secondary"
                 type="button"
-                className="btn btn-primary col-4"
-                onClick={this.handleRegister}
+                onClick={this.handleCheckboxChange}
               >
-                Register
+                {this.state.showPassword ? <FaEye /> : <FaEyeSlash />}
               </button>
             </div>
+            <span className="text-danger">{errors.password}</span>
           </div>
+          <div className="col-md-12">
+            <label htmlFor="firstName" className="form-label">
+              ชื่อจริง
+            </label>
+            <input
+              type="firstName"
+              className={`form-control ${errors.firstName ? "is-invalid" : ""}`}
+              id="firstName"
+              name="firstName"
+              value={this.state.firstName}
+              onChange={this.handleInputChange}
+            />
+            <span className="text-danger">{errors.firstName}</span>
+          </div>
+          <div className="col-12">
+            <label htmlFor="lastName" className="form-label">
+              นามสกุล
+            </label>
+            <input
+              type="text"
+              className={`form-control ${errors.lastName ? "is-invalid" : ""}`}
+              id="lastName"
+              name="lastName"
+              value={this.state.lastName}
+              onChange={this.handleInputChange}
+            />
+            <span className="text-danger">{errors.lastName}</span>
+          </div>
+          <div className="col-12">
+            <label htmlFor="studentId" className="form-label">
+              รหัสนิสิต
+            </label>
+            <input
+              type="text"
+              className={`form-control ${errors.studentId ? "is-invalid" : ""}`}
+              id="studentId"
+              name="studentId"
+              value={this.state.studentId}
+              onChange={this.handleInputChange}
+            />
+            <span className="text-danger">{errors.studentId}</span>
+          </div>
+          <div className="col-md-6">
+            <label htmlFor="faculty" className="form-label">
+              คณะ
+            </label>
+            <select
+              className={`form-select custom-select ${
+                errors.faculty ? "is-invalid" : ""
+              }`}
+              id="faculty"
+              name="faculty"
+              value={this.state.faculty}
+              onChange={this.handleInputChange}
+            >
+              <option value="">Choose faculty</option>
+              <option value="AS">ศิลปศาสตร์และวิทยาศาสตร์</option>
+              {/* Add more options as needed */}
+            </select>
+            <span className="text-danger">{errors.faculty}</span>
+          </div>
+          <div className="col-md-6">
+            <label htmlFor="major" className="form-label">
+              สาขา
+            </label>
+            <select
+              className={`form-select custom-select ${
+                errors.major ? "is-invalid" : ""
+              }`}
+              id="major"
+              name="major"
+              value={this.state.major}
+              onChange={this.handleInputChange}
+            >
+              <option value="">Choose major</option>
+              <option value="it">เทคโนโลยีสารสนเทศ</option>
+              {/* Add more options as needed */}
+            </select>
+            <span className="text-danger">{errors.major}</span>
+          </div>
+          <div className="col-12 p-3">
+            <div className="row">
+              <div className="container-md text-center">
+                <button
+                  type="button"
+                  className="btn btn-primary col-4"
+                  onClick={this.handleRegister}
+                >
+                  Register
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div className="text-center">
+          <p>
+            <a href="/">Already have an account? Login here</a>
+          </p>
         </div>
-      </form>
+      </div>
     );
   }
 }
 
-export default Register_page;
+export default withRouter(Register_page);
