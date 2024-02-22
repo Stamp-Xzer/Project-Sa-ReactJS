@@ -16,8 +16,6 @@ class SubjectPage extends Component {
   handleSelectChange = (event) => {
     const categoryID = event.target.value;
     this.setState({ categoryID }); // เมื่อมีการเลือกใน dropdown ให้อัปเดตค่า categoryID
-
-    // ส่ง POST request ไปยัง Express.js server
     axios
       .post("http://localhost:3301/courses", { categoryID })
       .then((response) => {
