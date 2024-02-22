@@ -19,8 +19,4 @@ class Home extends Component {
   }
 }
 
-function mapSteteToProps({ members }) {
-  return { members };
-}
-
-export default connect(mapSteteToProps, { membersFetch })(Home);
+export default Home;
