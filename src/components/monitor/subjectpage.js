@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom/cjs/react-router-dom.min.js";
-import Header from "../Header.js"; // Adjusted import path for Headers
-import Footer from "../Footer.js"; // Adjusted import path for Headers
+import Header from "../Header.js";
+import Footer from "../Footer.js";
 import axios from "axios";
 import React, { Component } from "react";
 
@@ -8,27 +8,26 @@ class SubjectPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoryID: "", // เพิ่ม state เพื่อเก็บค่า categoryID
-      courses: [], // เพิ่ม state เพื่อเก็บข้อมูลวิชา
+      categoryID: "",
+      courses: [],
     };
   }
 
   handleSelectChange = (event) => {
     const categoryID = event.target.value;
-    this.setState({ categoryID }); // เมื่อมีการเลือกใน dropdown ให้อัปเดตค่า categoryID
+    this.setState({ categoryID });
     axios
       .post("http://localhost:3301/courses", { categoryID })
       .then((response) => {
-        console.log(response.data); // พิมพ์ข้อมูลที่ได้รับจาก server ใน console เพื่อทดสอบ
-        this.setState({ courses: response.data }); // อัปเดต state ข้อมูลวิชา
+        console.log(response.data);
+        this.setState({ courses: response.data });
       })
       .catch((error) => {
         console.error("Error:", error);
-        // ดำเนินการเกี่ยวกับข้อผิดพลาดตามที่คุณต้องการ
       });
   };
   render() {
-    const { courses } = this.state; // เพิ่มการเรียกใช้งาน state ของ courses ใน render() method
+    const { courses } = this.state;
 
     return (
       <div>
@@ -74,6 +73,16 @@ class SubjectPage extends Component {
                 </Link>
               </a>
             </li>
+            <li className="navbar-item flexbox-left">
+              <a className="navbar-item-inner flexbox-left">
+                <div className="navbar-item-inner-icon-wrapper flexbox">
+                  <ion-icon name="log-out-outline"></ion-icon>
+                </div>
+                <Link to="/">
+                  <span className="link-text">Logout</span>
+                </Link>
+              </a>
+            </li>
           </ul>
         </nav>
 
@@ -86,7 +95,7 @@ class SubjectPage extends Component {
                 className="form-select custom-select col-md-4"
                 id="floatingSelect"
                 aria-label="Floating label select example"
-                onChange={this.handleSelectChange} // เพิ่ม event handler เมื่อมีการเลือกใน dropdown
+                onChange={this.handleSelectChange}
               >
                 <option selected>เลือกหมวดหมู่วิชา</option>
                 <option value="1">อยู่ดีมีสุข</option>

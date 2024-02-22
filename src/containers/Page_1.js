@@ -1,11 +1,49 @@
-import withAuth from "../containers/error/auth.js"; // Adjusted import path for withAuth
 import { Link } from "react-router-dom/cjs/react-router-dom.min.js";
 import Header from "../components/Header.js"; // Adjusted import path for Headers
 import Footer from "../components/Footer.js"; // Adjusted import path for Headers
-
+import axios from "axios";
 import React, { Component } from "react";
 
 class Page_1 extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      subStudents: [],
+      sumByCategoryIDBB: {}, // เพิ่ม sumByCategoryID เป็น state
+    };
+  }
+
+  componentDidMount() {
+    // เรียก API เพื่อดึงข้อมูล sub_student
+    axios
+      .post("http://localhost:3301/sub_student", {
+        StudentID: localStorage.getItem("student_id"),
+      })
+      .then((response) => {
+        console.log(response.data);
+
+        const sumByCategoryID = response.data.reduce(
+          (accumulator, currentValue) => {
+            const { CategoryID, CreditHours } = currentValue;
+            accumulator[CategoryID] =
+              (accumulator[CategoryID] || 0) + parseInt(CreditHours);
+            return accumulator;
+          },
+          {}
+        );
+
+        console.log("Sum by CategoryID:", sumByCategoryID);
+
+        this.setState({
+          subStudents: response.data,
+          sumByCategoryIDBB: sumByCategoryID, // เซ็ตค่า sumByCategoryID ให้กับ state
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        // ดำเนินการเกี่ยวกับข้อผิดพลาดตามที่คุณต้องการ
+      });
+  }
   render() {
     return (
       <div>
@@ -51,11 +89,21 @@ class Page_1 extends Component {
                 </Link>
               </a>
             </li>
+            <li className="navbar-item flexbox-left">
+              <a className="navbar-item-inner flexbox-left">
+                <div className="navbar-item-inner-icon-wrapper flexbox">
+                  <ion-icon name="log-out-outline"></ion-icon>
+                </div>
+                <Link to="/">
+                  <span className="link-text">Logout</span>
+                </Link>
+              </a>
+            </li>
           </ul>
         </nav>
 
         {/* Main content */}
-        <Header Head="ระบบคำนวณหน่วยกิต" />
+        <Header Head="ระบบคำนวณหน่วยกิตสาขาวิชา IT" />
         <div className="container text-center">
           <div className="row">
             <div className="col">
@@ -66,27 +114,63 @@ class Page_1 extends Component {
               <h5>กลุ่มสาระพลเมืองไทยและพลเมืองโลก</h5>
               <h5>กลุ่มสาระสุนทรียศาสตร์</h5>
               <h4>หมวดวิชาเฉพาะ</h4>
+              <h2>รวมหน่วยกิตทั้งหมด</h2>
             </div>
             <div className="col">
               <h2>หน่วยกิตที่ต้องการ</h2>
-              <h5>10/5</h5>
-              <h5>0/6</h5>
-              <h5>0/13</h5>
-              <h5>0/3</h5>
-              <h5>0/3</h5>
-              <h4>0/90</h4>
+              <h5>
+                {(this.state.sumByCategoryIDBB &&
+                  this.state.sumByCategoryIDBB[1]) ||
+                  0}
+                /5
+              </h5>
+              <h5>
+                {(this.state.sumByCategoryIDBB &&
+                  this.state.sumByCategoryIDBB[2]) ||
+                  0}
+                /6
+              </h5>
+              <h5>
+                {(this.state.sumByCategoryIDBB &&
+                  this.state.sumByCategoryIDBB[3]) ||
+                  0}
+                /13
+              </h5>
+              <h5>
+                {(this.state.sumByCategoryIDBB &&
+                  this.state.sumByCategoryIDBB[4]) ||
+                  0}
+                /3
+              </h5>
+              <h5>
+                {(this.state.sumByCategoryIDBB &&
+                  this.state.sumByCategoryIDBB[5]) ||
+                  0}
+                /3
+              </h5>
+              <h4>
+                {(this.state.sumByCategoryIDBB &&
+                  this.state.sumByCategoryIDBB[6]) ||
+                  0}
+                /90
+              </h4>
+              <h2>
+                {Object.values(this.state.sumByCategoryIDBB).reduce(
+                  (total, credits) => total + credits,
+                  0
+                )}
+              </h2>
             </div>
           </div>
           <br />
           <div className="row">
             <div className="col-8"></div>
-            <button type="button" class="btn btn-primary col-4">
+            <Link to="/add_sub" className="btn btn-primary col-4">
               เพิ่มวิชาที่ลงทะเบียน
-            </button>
+            </Link>
           </div>
           <br />
-          <table class="table table-striped-columns">
-            {" "}
+          <table className="table table-striped-columns">
             <thead>
               <tr>
                 <th scope="col">รหัสวิชา</th>
@@ -96,12 +180,14 @@ class Page_1 extends Component {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-              </tr>
+              {this.state.subStudents.map((subStudent) => (
+                <tr key={subStudent.CourseID}>
+                  <td>{subStudent.CourseID}</td>
+                  <td>{subStudent.CourseName}</td>
+                  <td>{subStudent.CreditHours}</td>
+                  <td>{subStudent.Semester}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -111,4 +197,4 @@ class Page_1 extends Component {
   }
 }
 
-export default withAuth(Page_1);
+export default Page_1;

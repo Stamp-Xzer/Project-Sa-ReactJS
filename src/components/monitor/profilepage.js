@@ -85,6 +85,16 @@ class ProfilePage extends Component {
                 </Link>
               </a>
             </li>
+            <li className="navbar-item flexbox-left">
+              <a className="navbar-item-inner flexbox-left">
+                <div className="navbar-item-inner-icon-wrapper flexbox">
+                  <ion-icon name="log-out-outline"></ion-icon>
+                </div>
+                <Link to="/">
+                  <span className="link-text">Logout</span>
+                </Link>
+              </a>
+            </li>
           </ul>
         </nav>
 
@@ -107,9 +117,15 @@ class ProfilePage extends Component {
                   <br />
                   ชื่อจริง-นามสกุล : {student.f_name} {student.l_name}
                   <br />
-                  สาขา : {student.Marjor}
+                  สาขา :{" "}
+                  {student.Marjor === "it"
+                    ? "เทคโนโลยีสารสนเทศ"
+                    : student.Marjor}
                   <br />
-                  คณะ : {student.Faculty}
+                  คณะ :{" "}
+                  {student.Faculty === "AS"
+                    ? "คณะศิลปศาสตร์และวิทยาศาสตร์"
+                    : student.Faculty}
                 </h3>
               </div>
             </div>

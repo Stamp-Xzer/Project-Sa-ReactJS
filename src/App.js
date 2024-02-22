@@ -9,6 +9,7 @@ import Page_1 from "./containers/Page_1";
 import NotFound from "./containers/error/NotFound";
 import ProfilePage from "../src/components/monitor/profilepage.js";
 import SubjectPage from "../src/components/monitor/subjectpage.js";
+import Add_Sub from "../src/components/monitor/forms_sub.js";
 localStorage.setItem("loggedIn", "false"); // Set loggedIn to true in localStor
 class App extends Component {
   renderRouter() {
@@ -19,6 +20,7 @@ class App extends Component {
         <Route exact path="/page1" component={Page_1} />
         <Route exact path="/page2" component={ProfilePage} />
         <Route exact path="/page3" component={SubjectPage} />
+        <Route exact path="/add_sub" component={Add_Sub} />
         <Route component={NotFound} />
       </Switch>
     );

@@ -38,10 +38,10 @@ class Monitor extends Component {
         console.log("Login successful");
         localStorage.setItem("loggedIn", "true");
         localStorage.setItem("email", this.state.email);
+        localStorage.setItem("student_id", response.data.result[0].StudentID);
         this.props.history.push("/page1");
       })
       .catch((error) => {
-        // Handle error here
         console.error("There was an error!", error);
       });
   };
