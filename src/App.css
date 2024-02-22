@@ -6,6 +6,14 @@
   height: 40vmin;
   pointer-events: none;
 }
+
+.avatar-circle {
+  width: 150px; /* ปรับขนาดตามที่ต้องการ */
+  height: 150px; /* ปรับขนาดตามที่ต้องการ */
+  overflow: hidden;
+  border-radius: 50%; /* ทำให้มีรูปร่างเป็นวงกลม */
+  margin: 0 auto; /* จัดการย้ายตำแหน่งแนวนอน */
+}
 :root {
   --primary: 237, 94%, 81%;
   --background: 266, 16%, 92%;

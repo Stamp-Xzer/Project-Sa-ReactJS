@@ -80,6 +80,7 @@ class Register_page extends Component {
     this.setState({ errors });
     return isValid;
   };
+
   addStudent() {
     axios
       .post("http://localhost:3301/create", {

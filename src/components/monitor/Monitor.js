@@ -35,9 +35,9 @@ class Monitor extends Component {
         password: this.state.password,
       })
       .then((response) => {
-        // Handle successful login here, e.g. by redirecting to the home page
         console.log("Login successful");
-        localStorage.setItem("loggedIn", "true"); // Set loggedIn to true in localStorage
+        localStorage.setItem("loggedIn", "true");
+        localStorage.setItem("email", this.state.email);
         this.props.history.push("/page1");
       })
       .catch((error) => {
