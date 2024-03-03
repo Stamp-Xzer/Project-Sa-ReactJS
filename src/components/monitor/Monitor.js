@@ -30,26 +30,31 @@ class Monitor extends Component {
   };
 
   login = () => {
-    axios
-      .post("http://localhost:3301/login", {
-        email: this.state.email,
-        password: this.state.password,
-      })
-      .then((response) => {
-        localStorage.setItem("loggedIn", "true");
-        localStorage.setItem("email", this.state.email);
-        localStorage.setItem("student_id", response.data.result[0].StudentID);
-        this.props.history.push("/page1");
-      })
-      .catch((error) => {
-        if (error.response.status === 404) {
-          this.setState({ error: "Server is Down" });
-        } else if (error.response.status === 401) {
-          this.setState({ error: "Invalid email or password" });
-        } else {
-          console.error("There was an error!", error);
-        }
-      });
+    // ตรวจสอบว่า email และ password ถูกกรอกครบถ้วนหรือไม่
+    if (this.state.email && this.state.password) {
+      axios
+        .post("http://localhost:3301/login", {
+          email: this.state.email,
+          password: this.state.password,
+        })
+        .then((response) => {
+          localStorage.setItem("loggedIn", "true");
+          localStorage.setItem("email", this.state.email);
+          localStorage.setItem("student_id", response.data.result[0].StudentID);
+          this.props.history.push("/page1");
+        })
+        .catch((error) => {
+          if (error.response.status === 404) {
+            this.setState({ error: "Server is Down" });
+          } else if (error.response.status === 401) {
+            this.setState({ error: "Invalid email or password" });
+          } else {
+            console.error("There was an error!", error);
+          }
+        });
+    } else {
+      this.setState({ error: "Please enter both email and password" });
+    }
   };
 
   handleConfirm = () => {
