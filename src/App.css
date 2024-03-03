@@ -7,6 +7,10 @@
   pointer-events: none;
 }
 
+.btn-spacing {
+  margin-right: 10px; /* ปรับระยะห่างระหว่างปุ่มด้วยคุณสมบัติ margin-right */
+}
+
 .error-block-overlay {
   position: fixed;
   /* top: 0; */

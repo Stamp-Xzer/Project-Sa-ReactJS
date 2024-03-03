@@ -10,8 +10,25 @@ class SubjectPage extends Component {
     this.state = {
       categoryID: "",
       courses: [],
+      sortOrder: "asc", // เพิ่มสถานะสำหรับการเรียงลำดับข้อมูล
+      searchValue: "", // เพิ่มสถานะสำหรับค่าค้นหา
     };
   }
+
+  componentDidMount() {
+    this.fetchCourses();
+  }
+
+  fetchCourses = () => {
+    axios
+      .get("http://localhost:3301/courses")
+      .then((response) => {
+        this.setState({ courses: response.data });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   handleSelectChange = (event) => {
     const categoryID = event.target.value;
@@ -26,8 +43,27 @@ class SubjectPage extends Component {
         console.error("Error:", error);
       });
   };
+
+  toggleSortOrder = () => {
+    this.setState((prevState) => ({
+      sortOrder: prevState.sortOrder === "asc" ? "desc" : "asc",
+    }));
+  };
+
+  handleInputChange = (event) => {
+    const { value } = event.target;
+    this.setState({ searchValue: value });
+  };
+
   render() {
-    const { courses } = this.state;
+    const { courses, searchValue } = this.state;
+
+    const filteredCourses = courses.filter((course) => {
+      return (
+        course.CourseID.includes(searchValue) ||
+        course.CourseName.includes(searchValue)
+      );
+    });
 
     return (
       <div>
@@ -106,6 +142,22 @@ class SubjectPage extends Component {
               </select>
               <br />
               <br />
+              <div className="mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="ค้นหา รหัสวิชา หรือชื่อวิชา"
+                  value={searchValue}
+                  onChange={this.handleInputChange}
+                />
+              </div>
+              <button className="btn btn-info" onClick={this.toggleSortOrder}>
+                {this.state.sortOrder === "asc"
+                  ? "หน่วยกิตเรียงจากน้อยไปมาก"
+                  : "หน่วยกิตเรียงจากมากไปน้อย"}
+              </button>
+              <br />
+              <br />
               <table className="table table-striped-columns">
                 <thead>
                   <tr>
@@ -116,14 +168,22 @@ class SubjectPage extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {courses.map((course) => (
-                    <tr key={course.CourseID}>
-                      <td>{course.CourseID}</td>
-                      <td>{course.CourseName}</td>
-                      <td>{course.CreditHours}</td>
-                      <td>{course.CategoryName}</td>
-                    </tr>
-                  ))}
+                  {filteredCourses
+                    .sort((a, b) => {
+                      if (this.state.sortOrder === "asc") {
+                        return a.CreditHours - b.CreditHours;
+                      } else {
+                        return b.CreditHours - a.CreditHours;
+                      }
+                    })
+                    .map((course) => (
+                      <tr key={course.CourseID}>
+                        <td>{course.CourseID}</td>
+                        <td>{course.CourseName}</td>
+                        <td>{course.CreditHours}</td>
+                        <td>{course.CategoryName}</td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
