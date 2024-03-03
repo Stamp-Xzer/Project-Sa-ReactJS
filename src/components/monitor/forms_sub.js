@@ -59,13 +59,11 @@ class Add_Sub extends Component {
           seme: `${C_Sem}/${C_D}`,
         })
         .then((response) => {
-          console.log(response.data);
           if (response.data == "Values Inserted") {
             this.props.history.push("/page1");
           } else {
             alert("ไม่มีรหัสรายวิชานี้ กรุณาแจ้งเจ้าของระบบ");
             this.props.history.push("/page1");
-            // console.log("Error adding subject:", response.data);
           }
         })
         .catch((error) => {

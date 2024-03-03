@@ -36,7 +36,6 @@ class Monitor extends Component {
         password: this.state.password,
       })
       .then((response) => {
-        console.log("Login successful");
         localStorage.setItem("loggedIn", "true");
         localStorage.setItem("email", this.state.email);
         localStorage.setItem("student_id", response.data.result[0].StudentID);

@@ -20,8 +20,6 @@ class Page_1 extends Component {
         StudentID: localStorage.getItem("student_id"),
       })
       .then((response) => {
-        console.log(response.data);
-
         const sumByCategoryID = response.data.reduce(
           (accumulator, currentValue) => {
             const { CategoryID, CreditHours } = currentValue;
@@ -31,8 +29,6 @@ class Page_1 extends Component {
           },
           {}
         );
-
-        console.log("Sum by CategoryID:", sumByCategoryID);
 
         this.setState({
           subStudents: response.data,
@@ -46,10 +42,8 @@ class Page_1 extends Component {
   }
 
   handleDelete = (courseID) => {
-    // แสดงกล่องข้อความยืนยันการลบ
     const isConfirmed = window.confirm("คุณแน่ใจหรือไม่ที่ต้องการลบรายการนี้?");
 
-    // ถ้าผู้ใช้กดตกลงในกล่องข้อความ
     if (isConfirmed) {
       axios
         .delete(`http://localhost:3301/del_sub_from`, {
@@ -59,8 +53,6 @@ class Page_1 extends Component {
           },
         })
         .then((response) => {
-          console.log("Deleted successfully");
-          // หากลบสำเร็จ รีเฟรชหน้านี้
           window.location.reload();
         })
         .catch((error) => {

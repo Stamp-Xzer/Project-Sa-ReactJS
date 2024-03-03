@@ -15,7 +15,6 @@ class ProfilePage extends Component {
 
   componentDidMount() {
     const emaila = localStorage.getItem("email");
-    console.log("email", emaila);
     axios
       .get(`http://localhost:3301/student`, {
         params: {

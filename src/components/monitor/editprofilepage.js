@@ -71,7 +71,6 @@ class EditProfilePage extends Component {
           student
         )
         .then((response) => {
-          console.log("Profile updated successfully:", response.data);
           this.props.history.push("/page2");
         })
         .catch((error) => {

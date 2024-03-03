@@ -36,7 +36,6 @@ class SubjectPage extends Component {
     axios
       .post("http://localhost:3301/courses", { categoryID })
       .then((response) => {
-        console.log(response.data);
         this.setState({ courses: response.data });
       })
       .catch((error) => {

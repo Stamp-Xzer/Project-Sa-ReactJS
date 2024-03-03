@@ -94,18 +94,14 @@ class Register_page extends Component {
       })
       .then(() => {
         this.props.history.push("/");
-
-        console.log("success");
       });
   }
 
   handleRegister = () => {
     const isValid = this.validateForm();
     if (isValid) {
-      console.log("Register data:", this.state);
       this.addStudent();
     } else {
-      console.log("Form validation failed");
     }
   };
 
