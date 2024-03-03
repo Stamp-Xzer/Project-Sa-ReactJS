@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
-import Page_1 from "../../containers/Page_1";
+import ErrorBlockOverlay from "./erroral.js"; // นำเข้าส่วนประกอบใหม่
 
 class Monitor extends Component {
   constructor(props) {
@@ -11,6 +11,7 @@ class Monitor extends Component {
       email: "",
       password: "",
       showPassword: false,
+      error: null, // เพิ่ม state เพื่อเก็บข้อความผิดพลาด
     };
   }
 
@@ -42,13 +43,31 @@ class Monitor extends Component {
         this.props.history.push("/page1");
       })
       .catch((error) => {
-        console.error("There was an error!", error);
+        if (error.response.status === 404) {
+          this.setState({ error: "Server is Down" });
+        } else if (error.response.status === 401) {
+          this.setState({ error: "Invalid email or password" });
+        } else {
+          console.error("There was an error!", error);
+        }
       });
+  };
+
+  handleConfirm = () => {
+    // ลบข้อความผิดพลาดและเซ็ตค่า state กลับเป็น null
+    this.setState({ error: null });
   };
 
   render() {
     return (
       <form className="container-sm">
+        {this.state.error && (
+          <ErrorBlockOverlay
+            message={this.state.error}
+            onConfirm={this.handleConfirm}
+          />
+        )}{" "}
+        {/* แสดง ErrorBlockOverlay ถ้ามี error */}
         <div className="mb-3">
           <label htmlFor="exampleInputEmail1" className="form-label">
             Email address
@@ -88,7 +107,7 @@ class Monitor extends Component {
             <button
               type="button"
               className="btn btn-primary col-4"
-              onClick={this.login} // Call the login function on button click
+              onClick={this.login}
             >
               Login
             </button>

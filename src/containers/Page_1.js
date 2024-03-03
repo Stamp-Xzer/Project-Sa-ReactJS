@@ -44,6 +44,31 @@ class Page_1 extends Component {
         // ดำเนินการเกี่ยวกับข้อผิดพลาดตามที่คุณต้องการ
       });
   }
+
+  handleDelete = (courseID) => {
+    // แสดงกล่องข้อความยืนยันการลบ
+    const isConfirmed = window.confirm("คุณแน่ใจหรือไม่ที่ต้องการลบรายการนี้?");
+
+    // ถ้าผู้ใช้กดตกลงในกล่องข้อความ
+    if (isConfirmed) {
+      axios
+        .delete(`http://localhost:3301/del_sub_from`, {
+          data: {
+            stu_id: localStorage.getItem("student_id"),
+            c_id: courseID,
+          },
+        })
+        .then((response) => {
+          console.log("Deleted successfully");
+          // หากลบสำเร็จ รีเฟรชหน้านี้
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  };
+
   render() {
     return (
       <div>
@@ -186,6 +211,12 @@ class Page_1 extends Component {
                   <td>{subStudent.CourseName}</td>
                   <td>{subStudent.CreditHours}</td>
                   <td>{subStudent.Semester}</td>
+                  <td
+                    className="text-danger"
+                    onClick={() => this.handleDelete(subStudent.CourseID)}
+                  >
+                    <i className="bi bi-archive-fill"> ลบ</i>
+                  </td>
                 </tr>
               ))}
             </tbody>

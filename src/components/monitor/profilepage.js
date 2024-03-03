@@ -128,6 +128,9 @@ class ProfilePage extends Component {
                     : student.Faculty}
                 </h3>
               </div>
+              <Link to="/edit_profile">
+                <button className="btn btn-primary">แก้ไขข้อมูล</button>
+              </Link>
             </div>
           </div>
         </div>
