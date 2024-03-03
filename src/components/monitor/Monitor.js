@@ -11,7 +11,7 @@ class Monitor extends Component {
       email: "",
       password: "",
       showPassword: false,
-      error: null, // เพิ่ม state เพื่อเก็บข้อความผิดพลาด
+      error: null,
     };
   }
 
@@ -30,7 +30,6 @@ class Monitor extends Component {
   };
 
   login = () => {
-    // ตรวจสอบว่า email และ password ถูกกรอกครบถ้วนหรือไม่
     if (this.state.email && this.state.password) {
       axios
         .post("http://localhost:3301/login", {
@@ -58,7 +57,6 @@ class Monitor extends Component {
   };
 
   handleConfirm = () => {
-    // ลบข้อความผิดพลาดและเซ็ตค่า state กลับเป็น null
     this.setState({ error: null });
   };
 
