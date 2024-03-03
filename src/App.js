@@ -1,8 +1,6 @@
-// import logo from './logo.svg';
 import "./App.css";
 import React, { Component } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-// import ProductItem from './components/product/ProductItem';
 import Home from "./containers/Home";
 import Register from "./containers/Register";
 import Page_1 from "./containers/Page_1";
@@ -11,7 +9,7 @@ import ProfilePage from "../src/components/monitor/profilepage.js";
 import SubjectPage from "../src/components/monitor/subjectpage.js";
 import Add_Sub from "../src/components/monitor/forms_sub.js";
 import EditProfilePage from "./components/monitor/editprofilepage.js";
-localStorage.setItem("loggedIn", "false"); // Set loggedIn to true in localStor
+localStorage.setItem("loggedIn", "false");
 class App extends Component {
   renderRouter() {
     return (
