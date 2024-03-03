@@ -43,6 +43,15 @@ class Add_Sub extends Component {
     forms.forEach((form) => {
       const { C_ID, C_Sem, C_D } = form;
 
+      if (isNaN(C_ID) || isNaN(C_Sem)) {
+        alert("กรุณาใส่ตัวเลขเท่านั้นใน รหัสวิชา และ ปีการศึกษา");
+        return;
+      }
+      if (!C_ID || !C_Sem || !C_D) {
+        alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+        return;
+      }
+
       axios
         .post("http://localhost:3301/add_sub", {
           stu_id: studentID,
@@ -51,7 +60,13 @@ class Add_Sub extends Component {
         })
         .then((response) => {
           console.log(response.data);
-          this.props.history.push("/page1");
+          if (response.data == "Values Inserted") {
+            this.props.history.push("/page1");
+          } else {
+            alert("ไม่มีรหัสรายวิชานี้ กรุณาแจ้งเจ้าของระบบ");
+            this.props.history.push("/page1");
+            // console.log("Error adding subject:", response.data);
+          }
         })
         .catch((error) => {
           console.error("Error adding subject:", error);
@@ -70,7 +85,7 @@ class Add_Sub extends Component {
 
     return (
       <div className="container-xl">
-        <Header Head="Student" />
+        <Header Head="เพิ่มรายวิชาที่ลงทะเบียน" />
         {forms.map((form, index) => (
           <form className="row g-3" key={index}>
             <div className="col-md-4">
@@ -109,7 +124,6 @@ class Add_Sub extends Component {
                 <option value="ภาคต้น">ภาคต้น</option>
                 <option value="ภาคปลาย">ภาคปลาย</option>
                 <option value="ภาคฤดูร้อน">ภาคฤดูร้อน</option>
-                {/* Add more options as needed */}
               </select>
               <span className="text-danger">{errors.C_D}</span>
             </div>
