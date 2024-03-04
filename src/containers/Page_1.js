@@ -41,6 +41,31 @@ class Page_1 extends Component {
       });
   }
 
+  handleSelectChange = (event) => {
+    const categoryID = event.target.value;
+    this.setState({ selectedCategory: categoryID });
+    console.log(categoryID);
+    axios
+      .post("http://localhost:3301/sub_student", {
+        StudentID: localStorage.getItem("student_id"),
+      })
+      .then((response) => {
+        const filteredSubStudents =
+          categoryID === "all"
+            ? response.data
+            : response.data.filter(
+                (student) => student.CategoryID === parseInt(categoryID)
+              );
+
+        this.setState({
+          subStudents: filteredSubStudents,
+        });
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+
   handleDelete = (courseID) => {
     const isConfirmed = window.confirm("คุณแน่ใจหรือไม่ที่ต้องการลบรายการนี้?");
 
@@ -186,6 +211,24 @@ class Page_1 extends Component {
               เพิ่มวิชาที่ลงทะเบียน
             </Link>
           </div>
+          <br />
+          <br />
+          <select
+            className="form-select custom-select col-md-4"
+            id="floatingSelect"
+            aria-label="Floating label select example"
+            onChange={this.handleSelectChange}
+            value={this.state.selectedCategory}
+          >
+            <option value="all">ทั้งหมด</option>
+            <option value="1">อยู่ดีมีสุข</option>
+            <option value="2">ศาสตร์แห่งผู้ประกอบการ</option>
+            <option value="3">ภาษากับการสื่อสาร</option>
+            <option value="4">พลเมืองไทยและพลเมืองโลก</option>
+            <option value="5">สุนทรียศาสตร์</option>
+            <option value="6">วิชาเฉพาะ</option>
+          </select>{" "}
+          <br />
           <br />
           <table className="table table-striped-columns">
             <thead>
